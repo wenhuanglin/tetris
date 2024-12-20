@@ -24,7 +24,7 @@ jobs:
         sudo ./linux-install-${CLOJURE_VERSION}.sh
     - run: mkdir app
     - run: clojure -M:app > app/index.html
-    - run: cp -r graph > app/
+    - run: cp -r graph app/
     - uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
