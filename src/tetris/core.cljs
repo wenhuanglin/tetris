@@ -6,6 +6,7 @@
 
 (def tetrominos
   {:I {:color "#1197dd"
+       :image "graph/teris-sample.jpeg" 
        :dim [4 1]
        :zero [1 0]
        0 [[-1 +0] [+0 +0] [+1 +0] [+2 +0]]
@@ -60,10 +61,14 @@
 (defn get-positions [player]
   (let [{:keys [type x y r]} player
         tetromino (type tetrominos)
-        {:keys [color]} tetromino]
+        {:keys [color image]} tetromino]
     (->> (get tetromino r)
          (map (fn [[i j]]
-                [[(+ i x) (+ j y)] color]))
+                [[(+ i x) (+ j y)]
+                 (if image
+                   {:background-image (str "url(" image ")")
+                    :background-size "cover"}
+                   {:background color})]))
          (into {}))))
 
 (defn full-rows [positions]
@@ -349,8 +354,8 @@
                  (fn []
                    (when (fn? on-update)
                      (on-update {:type :player-reset :x j})))}
-            (if-let [color (get positions [j i])]
-              [block {:background color}]
+            (if-let [style (get positions [j i])]
+              [block style]  ;; Pass entire style object
               (when-let [color (get projection [j i])]
                 [block {:background color :opacity 0.25}]))])])]]))
 
